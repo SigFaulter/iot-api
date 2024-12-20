@@ -15,7 +15,6 @@ CREATE TABLE data (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     temperature REAL NOT NULL,
     humidity REAL NOT NULL,
-    ac_stat BOOLEAN NOT NULL,
     leds_stats JSON NOT NULL,
     servo INTEGER NOT NULL,
 
