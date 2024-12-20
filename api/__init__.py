@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from api.routes import data
+from api.routes import data, status
 from api.db import init_db, db
 
 def create_api():
@@ -12,6 +12,7 @@ def create_api():
 
     init_db(app)
     app.register_blueprint(data.bp)
+    app.register_blueprint(status.bp)
 
     return app
 
