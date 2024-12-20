@@ -1,7 +1,7 @@
 from flask import Flask
 import os
-from api.db import db
 from api.routes import data
+from api.db import init_db, db
 
 def create_api():
     app = Flask(__name__)
@@ -10,9 +10,8 @@ def create_api():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    db.init_app(app)
-
-    # Register routes
+    init_db(app)
     app.register_blueprint(data.bp)
 
     return app
+
