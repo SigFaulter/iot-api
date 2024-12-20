@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from api.models.models import Status
+from api.db import db
 
 bp = Blueprint('status', __name__, url_prefix='/api/v1/')
 
@@ -13,7 +14,12 @@ def get_status():
     if not data:
         return jsonify({'error': 'No data found for this device.'}), 404
 
-    return jsonify({'data': [d.to_dict() for d in data]}), 200
+    try:
+        db.session.commit()
+        return jsonify({'data': [d.to_dict() for d in data]}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 # Set the status that the device should be in
 @bp.route('/status/<string:device_id>', methods=['PUT'])
@@ -28,4 +34,9 @@ def set_status(device_id):
         if hasattr(user, key):
             setattr(user, key, value)
 
-    return jsonify({'message': 'Status updated successfully.'}), 201
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Status updated successfully.'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
