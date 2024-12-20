@@ -1,6 +1,8 @@
 from api.db import db
 from datetime import datetime
+from dataclasses import dataclass
 
+@dataclass
 class Device(db.Model):
     __tablename__ = 'devices'
 
@@ -11,6 +13,7 @@ class Device(db.Model):
     # Establish a relationship with the Data table
     data = db.relationship('Data', backref='device', lazy=True)
 
+@dataclass
 class Data(db.Model):
     __tablename__ = 'data'
 
