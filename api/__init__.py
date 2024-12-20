@@ -1,11 +1,13 @@
 from flask import Flask
+import os
 from api.db import db
 from api.routes import data
 
 def create_api():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+    db_path = os.path.join(os.getcwd(), 'instance', 'app.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
