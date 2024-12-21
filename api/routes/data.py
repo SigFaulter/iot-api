@@ -64,7 +64,7 @@ def retrieve_iot_data(id):
         data = Data.query.filter(Data.device_id == request.device_id).order_by(Data.id.desc()).first()
         if not data:
             return jsonify({'error': 'No data found for this device.'}), 404
-        return jsonify({'data': data.to_dict()}), 200
+        return jsonify(data.to_dict()), 200
     else:
         data = Data.query.filter(Data.device_id == request.device_id and data.id >= id).all()
 
@@ -72,6 +72,6 @@ def retrieve_iot_data(id):
             return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        return jsonify({'data': [d.to_dict() for d in data]}), 200
+        return jsonify(d.to_dict()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
