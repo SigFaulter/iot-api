@@ -10,7 +10,7 @@ def generate_fake_devices_and_data(num_devices=1, num_entries_per_device=5):
     # Create fake devices
     for _ in range(num_devices):
         device_id = fake.uuid4()
-        token = fake.uuid4()
+        token = "b397e865-c68f-4b30-b065-126547e26abc" # testing token
 
         device = Device(device_id=device_id, token=token)
         db.session.add(device)
