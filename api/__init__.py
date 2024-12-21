@@ -18,6 +18,9 @@ def create_api():
     # middleware to verify token
     @app.before_request
     def verify_token():
+        if request.method == 'OPTIONS':
+            return
+
         given_token = request.headers.get('X-Token-Auth')
 
         if not given_token:
