@@ -28,7 +28,7 @@ def create_api():
         if not valid_device:
             return jsonify({'error': 'Invalid token'}), 401
 
-        request.device_id = Device.device_id
+        request.device_id = valid_device.device_id
 
     return app
 
