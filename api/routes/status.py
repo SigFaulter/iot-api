@@ -18,19 +18,17 @@ def get_status():
         return jsonify({"error": str(e)}), 500
 
 # Set the status that the device should be in
-@bp.route('/status/<string:device_id>', methods=['PUT'])
-def set_status(device_id):
-    data = request.get_json()
-    status = Status.query.get(Status.device_id == device_id).first()
+@bp.route('/status', methods=['PUT', 'PATCH'])
+def set_status():
+    status = Status.query.filter(Status.device_id == request.device_id).first()
 
-    if not data:
+    if not status:
         return jsonify({'error': 'Status of this device not found.'}), 404
 
-    for key, value in data.items():
-        if hasattr(user, key):
-            setattr(user, key, value)
 
     try:
+        status.leds_stats = request.json.get("leds_stats")
+        status.servo = request.json.get("servo")
         db.session.commit()
         return jsonify({'message': 'Status updated successfully.'}), 201
     except Exception as e:
