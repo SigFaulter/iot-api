@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from api.models.models import Data
 from api.db import db
+from sqlalchemy import and_
 
 bp = Blueprint('data', __name__, url_prefix='/api/v1/')
 
@@ -59,7 +60,6 @@ def retrieve_iot_data(id):
         id = int(id)
     except ValueError:
         return jsonify({'error': 'Invalid ID format'}), 400
-    data = None
 
     if id < 0:
         data = Data.query.filter(Data.device_id == request.device_id).order_by(Data.id.desc()).first()
@@ -67,7 +67,9 @@ def retrieve_iot_data(id):
             return jsonify({'error': 'No data found for this device.'}), 404
         return jsonify(data.to_dict()), 200
     else:
-        data = Data.query.filter(Data.device_id == request.device_id and data.id >= id).all()
+        data = Data.query.filter(
+            and_(Data.device_id == request.device_id, Data.id >= id)
+        ).order_by(Data.id).all()
 
         if not data:
             return jsonify({'error': 'No data found for this device.'}), 404
