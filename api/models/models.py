@@ -16,12 +16,10 @@ class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     device_id = db.Column(db.String(64), db.ForeignKey('devices.device_id'), nullable=False)  # Foreign key added
     servo = db.Column(db.Integer, nullable=False)
-    brightness = db.Column(db.Float, nullable=False)
+    leds_stats = db.Column(db.JSON, nullable=False)
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'device_id': self.device_id,
             'servo': self.servo,
             'brightness': self.brightness
         }
