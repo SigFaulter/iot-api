@@ -4,8 +4,6 @@ from api.db import db
 
 bp = Blueprint('data', __name__, url_prefix='/api/v1/')
 
-# TODO add authentication
-
 # Store data of current device
 @bp.route('/data', methods=['POST'])
 def store_iot_data():

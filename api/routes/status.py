@@ -4,8 +4,6 @@ from api.db import db
 
 bp = Blueprint('status', __name__, url_prefix='/api/v1/')
 
-# TODO add authentication
-
 # Get current status the iot should adhere to
 @bp.route('/status', methods=['GET'])
 def get_status():
