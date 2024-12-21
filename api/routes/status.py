@@ -7,13 +7,13 @@ bp = Blueprint('status', __name__, url_prefix='/api/v1/')
 # Get current status the iot should adhere to
 @bp.route('/status', methods=['GET'])
 def get_status():
-    data = Status.query.all()
+    data = Status.query.filter(request.device_id == Status.device_id).first()
 
     if not data:
         return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        return jsonify({'data': [d.to_dict() for d in data]}), 200
+        return jsonify(data.to_dict()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -21,7 +21,7 @@ def get_status():
 @bp.route('/status/<string:device_id>', methods=['PUT'])
 def set_status(device_id):
     data = request.get_json()
-    status = Status.query.get(Status.device_id == device_id)
+    status = Status.query.get(Status.device_id == device_id).first()
 
     if not data:
         return jsonify({'error': 'Status of this device not found.'}), 404
