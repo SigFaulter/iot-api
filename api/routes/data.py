@@ -22,7 +22,7 @@ def store_iot_data():
 
 # Get all data from current device
 @bp.route('/data', methods=['GET'])
-def retrive_all_iot_data():
+def retrieve_all_iot_data():
     data = Data.query.all()
 
     if not data:
@@ -36,9 +36,18 @@ def retrive_all_iot_data():
         return jsonify({"error": str(e)}), 500
 
 # Get data from a specific row onwards
-@bp.route('/data/<int:id>', methods=['GET'])
+# any negative number == last row available
+@bp.route('/data/<id>', methods=['GET'])
 def retrieve_iot_data(id):
-    data = Data.query.filter(Data.id >= id).all()
+    try:
+        id = int(id)
+    except ValueError:
+        return jsonify({'error': 'Invalid ID format'}), 400
+
+    if id < 0:
+        data = Data.query.order_by(Data.id.desc()).first()
+    else:
+        data = Data.query.filter(Data.id >= id).all()
 
     if not data:
         return jsonify({'error': 'No data found for this device.'}), 404
