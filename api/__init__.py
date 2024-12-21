@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 import os
 from api.routes import data, status
 from api.db import init_db, db
+from api.models.models import Device
 
 def create_api():
     app = Flask(__name__)
@@ -13,6 +14,19 @@ def create_api():
     init_db(app)
     app.register_blueprint(data.bp)
     app.register_blueprint(status.bp)
+
+    # middleware to verify token
+    @app.before_request
+    def verify_token():
+        given_token = request.headers.get('X-Token-Auth')
+
+        if not given_token:
+            return jsonify({'error': 'Missing token'}), 401
+
+        valid_token = Device.query.filter(Device.token == given_token).all()
+
+        if not valid_token:
+            return jsonify({'error': 'Invalid token'}), 401
 
     return app
 
