@@ -7,12 +7,32 @@ bp = Blueprint('data', __name__, url_prefix='/api/v1/')
 # Store data of current device
 @bp.route('/data', methods=['POST'])
 def store_iot_data():
-    data = request.json.get('data')
-    if not data:
-        return jsonify({'error': 'data is required.'}), 400
+    device_id = request.device_id
+
+    temperature = request.json.get('temperature')
+    humidity = request.json.get('humidity')
+    leds_stats = request.json.get('leds_stats')
+    servo = request.json.get('servo')
+    brightness = request.json.get('brightness')
+
+    if not all([temperature, humidity, leds_stats, servo, brightness]):
+        return jsonify({'error': 'Missing required fields.'}), 400
 
     try:
+        data_dict = {
+            'device_id': device_id,
+            'temperature': temperature,
+            'humidity': humidity,
+            'leds_stats': leds_stats,
+            'servo': servo,
+            'brightness': brightness
+        }
+
+        new_data = Data(**data_dict)
+
+        db.session.add(new_data)
         db.session.commit()
+
         return jsonify({'message': 'Data stored successfully.'}), 201
     except Exception as e:
         db.session.rollback()
