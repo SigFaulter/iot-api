@@ -59,6 +59,7 @@ def retrieve_iot_data(id):
         id = int(id)
     except ValueError:
         return jsonify({'error': 'Invalid ID format'}), 400
+    data = None
 
     if id < 0:
         data = Data.query.filter(Data.device_id == request.device_id).order_by(Data.id.desc()).first()
@@ -72,6 +73,6 @@ def retrieve_iot_data(id):
             return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        return jsonify(d.to_dict()), 200
+        return jsonify(data.to_dict()), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
