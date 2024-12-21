@@ -73,6 +73,6 @@ def retrieve_iot_data(id):
             return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        return jsonify(data.to_dict()), 200
+        return jsonify([d.to_dict() for d in data]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
