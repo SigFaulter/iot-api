@@ -15,7 +15,6 @@ def get_status():
         return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        db.session.commit()
         return jsonify({'data': [d.to_dict() for d in data]}), 200
     except Exception as e:
         db.session.rollback()
