@@ -46,6 +46,9 @@ def retrieve_iot_data(id):
 
     if id < 0:
         data = Data.query.order_by(Data.id.desc()).first()
+        if not data:
+            return jsonify({'error': 'No data found for this device.'}), 404
+        return jsonify({'data': data.to_dict()}), 200
     else:
         data = Data.query.filter(Data.id >= id).all()
 
