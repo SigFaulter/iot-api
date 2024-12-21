@@ -18,16 +18,16 @@ def store_iot_data():
     if not all([temperature, humidity, leds_stats, servo, brightness]):
         return jsonify({'error': 'Missing required fields.'}), 400
 
-    try:
-        data_dict = {
-            'device_id': device_id,
-            'temperature': temperature,
-            'humidity': humidity,
-            'leds_stats': leds_stats,
-            'servo': servo,
-            'brightness': brightness
-        }
+    data_dict = {
+        'device_id': device_id,
+        'temperature': temperature,
+        'humidity': humidity,
+        'leds_stats': leds_stats,
+        'servo': servo,
+        'brightness': brightness
+    }
 
+    try:
         new_data = Data(**data_dict)
 
         db.session.add(new_data)
@@ -68,8 +68,8 @@ def retrieve_iot_data(id):
     else:
         data = Data.query.filter(Data.device_id == request.device_id and data.id >= id).all()
 
-    if not data:
-        return jsonify({'error': 'No data found for this device.'}), 404
+        if not data:
+            return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
         return jsonify({'data': [d.to_dict() for d in data]}), 200
