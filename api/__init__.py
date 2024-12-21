@@ -23,10 +23,12 @@ def create_api():
         if not given_token:
             return jsonify({'error': 'Missing token'}), 401
 
-        valid_token = Device.query.filter(Device.token == given_token).all()
+        valid_device = Device.query.filter(Device.token == given_token).first()
 
-        if not valid_token:
+        if not valid_device:
             return jsonify({'error': 'Invalid token'}), 401
+
+        request.device_id = Device.device_id
 
     return app
 
