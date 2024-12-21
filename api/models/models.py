@@ -21,7 +21,7 @@ class Status(db.Model):
     def to_dict(self):
         return {
             'servo': self.servo,
-            'brightness': self.brightness
+            'leds_stats': self.leds_stats
         }
 
 class Data(db.Model):
