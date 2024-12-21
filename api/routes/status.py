@@ -17,7 +17,6 @@ def get_status():
     try:
         return jsonify({'data': [d.to_dict() for d in data]}), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 # Set the status that the device should be in

@@ -29,10 +29,8 @@ def retrieve_all_iot_data():
         return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        db.session.commit()
         return jsonify({'data': [d.to_dict() for d in data]}), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 # Get data from a specific row onwards
@@ -56,8 +54,6 @@ def retrieve_iot_data(id):
         return jsonify({'error': 'No data found for this device.'}), 404
 
     try:
-        db.session.commit()
         return jsonify({'data': [d.to_dict() for d in data]}), 200
     except Exception as e:
-        db.session.rollback()
         return jsonify({"error": str(e)}), 500
