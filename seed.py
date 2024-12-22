@@ -21,7 +21,7 @@ def generate_fake_devices_and_data(num_devices=1, num_entries_per_device=5):
                 created=fake.date_this_year(),
                 temperature=fake.random_number(digits=2),
                 humidity=fake.random_number(digits=2),
-                leds_stats=json.dumps([1,0,1,0]),
+                leds_stats=[1,0,1,0],
                 servo=fake.random_int(min=0, max=100),
                 brightness=fake.random_number(digits=2)
             )
@@ -30,7 +30,7 @@ def generate_fake_devices_and_data(num_devices=1, num_entries_per_device=5):
     status = Status(
         device_id=device.device_id,
         servo=fake.random_int(min=0, max=100),
-        leds_stats=json.dumps([1,0,1,0]),
+        leds_stats=[1,0,1,0],
     )
     db.session.add(status)
     db.session.commit()
